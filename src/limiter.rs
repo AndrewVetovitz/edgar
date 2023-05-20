@@ -1,27 +1,30 @@
 use std::collections::LinkedList;
-use std::ops::Deref;
 use std::time::{SystemTime, UNIX_EPOCH};
 
-static linked_list: LinkedList<u128> = LinkedList::new();
-static TEN_MINUTES_AS_MILLISECONDS: u128 = 600000;
+const LINKED_LIST: LinkedList<u128> = LinkedList::new();
+const ONE_MINUTE_AS_MILLISECONDS: u128 = 60000;
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct RateLimiter {
-    limit: u128,
+    limit: u16,
 }
 
 impl RateLimiter {
-    pub fn new(limit: u128) -> RateLimiter {
+    pub fn new(limit: u16) -> RateLimiter {
         RateLimiter { limit }
     }
 
     pub fn acquire(&self) {
-        // remove_old_entries(linked_list, unix_timestamp());
+        remove_old_entries(LINKED_LIST, unix_timestamp());
+
+        if LINKED_LIST.len() >= self.limit as usize {
+            return;
+        }
     }
 }
 
 fn remove_old_entries(mut list: LinkedList<u128>, current_time: u128) {
-    while !list.is_empty() && *(list.front().unwrap()) < current_time - TEN_MINUTES_AS_MILLISECONDS  {
+    while !list.is_empty() && *(list.front().unwrap()) < current_time - ONE_MINUTE_AS_MILLISECONDS  {
         list.pop_front();
     }
 }
@@ -36,6 +39,6 @@ fn unix_timestamp() -> u128 {
 #[cfg(test)]
 fn test() {
     fn test_static() {
-
+        
     }
 }

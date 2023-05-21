@@ -1,11 +1,11 @@
-use std::error::Error;
 use std::fs::File;
 use std::io::copy;
 
+use crate::errors::EdgarAPIError;
 use cik::CIK;
 use reqwest::Response;
 
-pub(crate) async fn download_response_file(response: Response) -> Result<(), Box<dyn Error>> {
+pub(crate) async fn download_response_file(response: Response) -> Result<(), EdgarAPIError> {
     let mut dest = {
         let filename = response
             .url()

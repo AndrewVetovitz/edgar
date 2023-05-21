@@ -1,11 +1,11 @@
+use crate::errors::EdgarAPIError;
 use crate::EdgarAPI;
-use std::error::Error;
 
 use reqwest::{Response, StatusCode};
 
 use std::{thread, time::Duration};
 
-pub async fn get(wrapper: &mut EdgarAPI, endpoint: &str) -> Result<Response, Box<dyn Error>> {
+pub async fn get(wrapper: &mut EdgarAPI, endpoint: &str) -> Result<Response, EdgarAPIError> {
     loop {
         loop {
             match wrapper.rate_limiter.stall_for() {

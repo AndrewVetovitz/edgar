@@ -1,5 +1,5 @@
-// TODO testing
 // make rate limiter thread safe
+// TODO testing
 // TODO documentation
 // TODO release
 
